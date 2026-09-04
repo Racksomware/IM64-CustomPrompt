@@ -36,6 +36,12 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/libsm64-godot/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://mario/": "red"
+}
+
 [input]
 
 mario_stick_left={

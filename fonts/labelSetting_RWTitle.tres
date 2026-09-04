@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://0j074y56uh2m"]
+
+[ext_resource type="FontFile" uid="uid://cgkbkwvgp3fc0" path="res://fonts/Rodondo.otf" id="1_ivtn6"]
+
+[resource]
+font = ExtResource("1_ivtn6")
+font_size = 52

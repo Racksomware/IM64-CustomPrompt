@@ -214,7 +214,6 @@ var _cam_dir := Vector3(0, 0, 1)
 var _cam_target_dist := 0.0
 var _mario_input := {}
 @onready var seed_label := $SeedLabel as Label
-@onready var hint_text := $HintText as Label
 @onready var level_timer := $LevelTimer as Label
 @onready var coin_counter = $CoinCounter
 @onready var power_disp = $PowerDisp
@@ -249,7 +248,7 @@ func _process(delta: float) -> void:
 	RenderingServer.global_shader_parameter_set("camera_angles", camera.rotation)
 	RenderingServer.global_shader_parameter_set("aspect_ratio", get_window().size.x / get_window().size.y)
 	#DebugDraw2D.set_text("COIN COUNT", current_coin_count)
-	coin_counter.text = "$*" + str(current_coin_count)
+	coin_counter.text = str(current_coin_count)
 	health_wedges_disp.material.set_shader_parameter("wedges", health_wedges)
 	star_arrow.global_position = camera.position + camera.basis.z * -0.2 + camera.basis.y * 0.065
 	star_mesh.global_position = star_arrow.global_position
@@ -258,29 +257,7 @@ func _process(delta: float) -> void:
 	star_mesh.basis = star_mesh.basis.rotated(star_mesh.basis.z.normalized(), float(Time.get_ticks_msec()) * 0.001)
 	star_arrow.scale = Vector3(0.0035, 0.0035, 0.0035)
 	star_arrow.look_at(SOGlobal.main_star_pos)
-	if hide_hud and !hide_hud_old:
-		seed_label.visible = false
-		level_timer.visible = false
-		hint_text.visible = false
-		hint_text_2.visible = false
-		hint_text_3.visible = false
-		coin_counter.visible = false
-		power_disp.visible = false
-		checkpoint_helper.visible = false
-		star_arrow.visible = false
 	
-	if !hide_hud and hide_hud_old:
-		seed_label.visible = true
-		level_timer.visible = true
-		hint_text.visible = true
-		hint_text_2.visible = true
-		hint_text_3.visible = true
-		coin_counter.visible = true
-		power_disp.visible = true
-		checkpoint_helper.visible = true
-		star_arrow.visible = true
-	
-	hide_hud_old = hide_hud
 	#DebugDraw3D.draw_sphere(position, 0.1, Color(1, 1, 1), delta)
 
 
@@ -478,8 +455,6 @@ func _respawn_mario(resp_sound) -> void:
 var checkpoint_pos : Vector3 = Vector3.ZERO
 var checkpoint_facing : float = 0
 var checkpoint_flag : Node3D
-@onready var hint_text_3 = $HintText3
-@onready var hint_text_2 = $HintText2
 
 func smin(a : float, b : float, k : float) -> float:
 	var h : float = clampf(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
@@ -582,7 +557,6 @@ func _calculate_gameplay_camera(delta : float):
 	camera.global_rotation_degrees = snapped(camera.global_rotation_degrees, Vector3(angle_snap, angle_snap, angle_snap))
 
 var hide_hud : bool = false
-var hide_hud_old : bool = false
 var gravity_add : float = 0.0
 var gravity_set_time : int = 0
 
@@ -599,19 +573,11 @@ func _tick(delta: float) -> void:
 			_respawn_mario(preload("res://mario/enter_painting.WAV"))
 	
 	if _action == SM64MarioAction.STAR_DANCE_EXIT and !_paused and ready_to_play:
-		if !hide_hud:
-			hint_text_3.visible = true
-			hint_text_2.visible = true
 		if Input.is_action_just_pressed("mario_a"):
 			_internal.set_action(SM64MarioAction.IDLE)
 		if Input.is_action_just_pressed("mario_b"):
 			_internal.set_action(SM64MarioAction.SPAWN_SPIN_AIRBORNE)
 			SOGlobal.current_level_manager._create_mario_world()
-			hint_text_3.visible = false
-			hint_text_2.visible = false
-	else:
-		hint_text_3.visible = false
-		hint_text_2.visible = false
 	
 	if _paused or !ready_to_play:
 		seed_label.text = "Current Seed: " + str(SOGlobal.current_seed)
@@ -628,14 +594,6 @@ func _tick(delta: float) -> void:
 		if finish_time < 0:
 			timer_seconds = float(Time.get_ticks_msec() - start_time) * 0.001
 		level_timer.text = "%02d:%02d.%03d" % [timer_seconds/60.0, fmod(timer_seconds, 60.0), fmod(timer_seconds * 1000, 1000.0)]
-	
-	if ready_to_play:
-		visible = true
-		hint_text.visible = false
-	else:
-		visible = false
-		if !hide_hud:
-			hint_text.visible = true
 	
 	if _paused:
 		return
@@ -655,7 +613,7 @@ func _tick(delta: float) -> void:
 	_mario_input.stick = Vector2(pl_input.JoyXAxis, pl_input.JoyYAxis)
 	if _mario_input.stick.length() > 1.0:
 		_mario_input.stick = _mario_input.stick.normalized()
-	#DebugDraw2D.set_text("INPUT", _mario_input.stick)
+	DebugDraw2D.set_text("INPUT", _mario_input.stick)
 	var camera_input : Vector2 = Input.get_vector("cam_stick_left", "cam_stick_right", "cam_stick_up", "cam_stick_down")
 	if SOGlobal.flip_x:
 		camera_input.x *= -1
@@ -702,6 +660,7 @@ func _tick(delta: float) -> void:
 	
 	if action & SM64MarioAction.FLAG_STATIONARY > 0:
 		if Input.is_action_just_pressed("dpad_up"):
+			print("Spawning a checkpoint flag!")
 			_create_checkpoint()
 	
 	match action:

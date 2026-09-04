@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://62qg1huhgl2d"]
+
+[ext_resource type="FontFile" uid="uid://dc5fnpxu1cb5h" path="res://fonts/rain-world-menu-font-webfont.otf" id="1_vhcg4"]
+
+[resource]
+font = ExtResource("1_vhcg4")
+font_size = 24
