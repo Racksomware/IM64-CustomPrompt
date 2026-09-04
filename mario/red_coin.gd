@@ -14,7 +14,6 @@ var destroy_on_retry : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	await get_tree().create_timer(0.1).timeout
-	var intersecting = true
 	animated_sprite_3d.play("default")
 	intersect_cast.force_shapecast_update()
 	if intersect_cast.is_colliding():

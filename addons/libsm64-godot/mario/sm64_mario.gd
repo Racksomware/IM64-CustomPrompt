@@ -214,7 +214,6 @@ var _cam_dir := Vector3(0, 0, 1)
 var _cam_target_dist := 0.0
 var _mario_input := {}
 @onready var seed_label := $SeedLabel as Label
-@onready var level_timer := $LevelTimer as Label
 @onready var coin_counter = $CoinCounter
 @onready var power_disp = $PowerDisp
 @onready var health_wedges_disp = $PowerDisp/HealthWedges
@@ -561,6 +560,9 @@ var gravity_add : float = 0.0
 var gravity_set_time : int = 0
 
 func _tick(delta: float) -> void:
+	
+	#debug prints because I'm fucking dense <3
+	
 	if _id < 0:
 		return
 	if SOGlobal.unfocused:
@@ -580,20 +582,19 @@ func _tick(delta: float) -> void:
 			SOGlobal.current_level_manager._create_mario_world()
 	
 	if _paused or !ready_to_play:
-		seed_label.text = "Current Seed: " + str(SOGlobal.current_seed)
+		if SOGlobal.current_seed == str(1):
+			seed_label.visible = false
+			print("ToDo! Special Map Loading Thing")
+		else:
+			seed_label.visible = false
+			seed_label.text = "Current Seed: " + str(SOGlobal.current_seed)
+		
 		if !hide_hud:
 			seed_label.visible = true
 			checkpoint_helper.visible = true
-		level_timer.visible = false
 	else:
 		checkpoint_helper.visible = false
 		seed_label.visible = false
-		if !hide_hud:
-			level_timer.visible = true
-		var timer_seconds : float = float(finish_time - start_time) * 0.001
-		if finish_time < 0:
-			timer_seconds = float(Time.get_ticks_msec() - start_time) * 0.001
-		level_timer.text = "%02d:%02d.%03d" % [timer_seconds/60.0, fmod(timer_seconds, 60.0), fmod(timer_seconds * 1000, 1000.0)]
 	
 	if _paused:
 		return
@@ -673,8 +674,17 @@ func _tick(delta: float) -> void:
 			collision_cylinder.height = 2.0
 			collision_cylinder.radius = 1.25
 	
-	if Input.is_action_just_pressed("dpad_down") and checkpoint_flag and is_instance_valid(checkpoint_flag):
-		_restore_mario_to_checkpoint()
+	if Input.is_action_just_pressed("dpad_down"):
+		print("Attempting to teleport Mario to the checkpoint flag...")
+		if checkpoint_flag and is_instance_valid(checkpoint_flag):
+			print("TPing Mario!")
+			_restore_mario_to_checkpoint()
+		elif !checkpoint_flag:
+			print("nil Checkpoint.")
+		elif checkpoint_flag and !is_instance_valid(checkpoint_flag):
+			print("Flag found, but couldn't detect it, somehow.")
+		else:
+			print("...?")
 		
 	
 	if Time.get_ticks_msec() > gravity_set_time + 10000:
