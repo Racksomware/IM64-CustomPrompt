@@ -2,7 +2,7 @@ class_name Coin extends Node3D
 
 @onready var area_3d := $Area3D as Area3D
 var coin_value : int = 1
-var coin_sound : AudioStream = preload("res://mario/sfx/sm64_coin.wav")
+var coin_sound : AudioStream = preload("res://mario/sfx/marioSounds/sm64_coin.wav")
 @onready var animated_sprite_3d = $AnimatedSprite3D
 @onready var intersect_cast = $IntersectCast
 @onready var drop_to_ground_cast = $DropToGroundCast

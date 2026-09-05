@@ -206,7 +206,6 @@ var _cam_target 			:= Vector3(0, 0, 0)
 var _cam_dir 				:= Vector3(0, 0, 1)
 var _cam_target_dist 		:= 0.0
 var _mario_input 			:= {}
-@onready var seed_label 		:= $SeedLabel as Label
 @onready var coin_counter 		= $CoinCounter
 @onready var power_disp 		= $PowerDisp
 @onready var health_wedges_disp = $PowerDisp/HealthWedges
@@ -233,7 +232,6 @@ func _ready() -> void:
 
 @onready var star_arrow := $star_arrow as MeshInstance3D
 @onready var star_mesh := $StarMesh as MeshInstance3D
-@onready var checkpoint_helper = $CheckpointHelper
 
 func _process(delta: float) -> void:
 	_tick(delta)
@@ -362,13 +360,13 @@ func _get_power_star(in_star_id : String) -> void:
 	_internal.set_action(SM64MarioAction.FALL_AFTER_STAR_GRAB)
 	audio_stream_player.play()
 	var saysound_playback : AudioStreamPlaybackPolyphonic = audio_stream_player.get_stream_playback()
-	saysound_playback.play_stream(preload("res://mario/sfx/enter_painting.WAV"), 0, -8, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/marioSounds/enter_painting.WAV"), 0, -8, 1.0)
 	await get_tree().create_timer(0.5).timeout
-	saysound_playback.play_stream(preload("res://mario/sfx/star_get.wav"), 0, 0, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/marioSounds/star_get.wav"), 0, 0, 1.0)
 	#_internal.set_action(SM64MarioAction.FALL_AFTER_STAR_GRAB)
 	set_angle((camera.position - position).normalized())
 	await get_tree().create_timer(1.2).timeout
-	saysound_playback.play_stream(preload("res://mario/sfx/here_we_go.wav"), 0, 10, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/marioSounds/here_we_go.wav"), 0, 10, 1.0)
 
 var ready_to_play : bool = false
 var preview_cam_yaw : float = 0
@@ -421,10 +419,6 @@ func _respawn_mario(resp_sound) -> void:
 	action = SM64MarioAction.SPAWN_SPIN_AIRBORNE
 	start_time = Time.get_ticks_msec()
 	finish_time = -1.0
-	if checkpoint_flag and is_instance_valid(checkpoint_flag):
-		checkpoint_flag.queue_free()
-	checkpoint_pos = position
-	checkpoint_facing = face_angle
 	SOGlobal.play_sound(resp_sound)
 	#for child in SOGlobal.get_children():
 		#if child is PowerStar:
@@ -435,10 +429,6 @@ func _respawn_mario(resp_sound) -> void:
 			#child._respawn()
 		#if child is CorkBox:
 			#child._reset()
-
-var checkpoint_pos : Vector3 = Vector3.ZERO
-var checkpoint_facing : float = 0
-var checkpoint_flag : Node3D
 
 func smin(a : float, b : float, k : float) -> float:
 	var h : float = clampf(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
@@ -454,28 +444,19 @@ func _create_checkpoint() -> void:
 	var hit_block := spawn_line_cast.get_collider().get_parent() as LevelBlock
 	if hit_block.current_move_type != LevelBlock.move_type.NONE:
 		return
-	checkpoint_pos = global_position
-	checkpoint_facing = face_angle
-	if checkpoint_flag and is_instance_valid(checkpoint_flag):
-		checkpoint_flag.queue_free()
-	checkpoint_flag = preload("res://mario/objects/checkpoint_flag.tscn").instantiate()
-	checkpoint_flag.position = checkpoint_pos
-	SOGlobal.add_child(checkpoint_flag)
-	checkpoint_flag.get_node("AnimationPlayer").play("flag_spawn")
-	SOGlobal.play_sound(preload("res://mario/sfx/sm64_drop_into_course.wav"))
 
 func _restore_mario_to_checkpoint() -> void:
 	num_checkpoints_used += 1
-	teleport(checkpoint_pos)
+	#teleport(checkpoint_pos)
 	_cam_target_height = position.y
-	set_angle(Vector3.FORWARD.rotated(Vector3.UP, checkpoint_facing))
+	#set_angle(Vector3.FORWARD.rotated(Vector3.UP, checkpoint_facing))
 	velocity = Vector3.ZERO
 	_velocity = Vector3.ZERO
 	set_forward_velocity(0)
 	_internal.set_velocity(Vector3.ZERO)
-	_internal.set_face_angle(checkpoint_facing)
+	#_internal.set_face_angle(checkpoint_facing)
 	_internal.set_forward_velocity(0.0)
-	SOGlobal.play_sound(preload("res://mario/sfx/sm64_spinning_heart.wav"))
+	SOGlobal.play_sound(preload("res://mario/sfx/marioSounds/sm64_spinning_heart.wav"))
 	_internal.set_action(SM64MarioAction.IDLE)
 
 var time_since_start : float = 0
@@ -553,11 +534,12 @@ func _tick(delta: float) -> void:
 	if SOGlobal.unfocused:
 		return
 	if position.y <= -32:
-		if checkpoint_flag and is_instance_valid(checkpoint_flag):
-			_restore_mario_to_checkpoint()
-		else: if !needs_respawning:
+		#if checkpoint_flag and is_instance_valid(checkpoint_flag):
+		#	_restore_mario_to_checkpoint()
+		if !needs_respawning:
 			needs_respawning = true
-			_respawn_mario(preload("res://mario/sfx/enter_painting.WAV"))
+			_respawn_mario(preload("res://mario/sfx/marioSounds/enter_painting.WAV"))
+		print("Tp'ed back!")
 	
 	if _action == SM64MarioAction.STAR_DANCE_EXIT and !_paused and ready_to_play:
 		if Input.is_action_just_pressed("mario_a"):
@@ -568,18 +550,7 @@ func _tick(delta: float) -> void:
 	
 	if _paused or !ready_to_play:
 		if SOGlobal.current_seed == str(1):
-			seed_label.visible = false
 			print("ToDo! Special Map Loading Thing")
-		else:
-			seed_label.visible = false
-			seed_label.text = "Current Seed: " + str(SOGlobal.current_seed)
-		
-		if !hide_hud:
-			seed_label.visible = true
-			checkpoint_helper.visible = true
-	else:
-		checkpoint_helper.visible = false
-		seed_label.visible = false
 	
 	if _paused:
 		return
@@ -619,7 +590,7 @@ func _tick(delta: float) -> void:
 		if Input.is_action_just_pressed("mario_a"):
 			ready_to_play = true
 			start_time = Time.get_ticks_msec()
-			_respawn_mario(preload("res://mario/sfx/enter_painting.WAV"))
+			_respawn_mario(preload("res://mario/sfx/marioSounds/enter_painting.WAV"))
 		preview_cam_pitch += Input.get_axis(stick_up, stick_down) * delta * 90
 		preview_cam_yaw += Input.get_axis(stick_left, stick_right) * delta * 90
 		preview_cam_pan_pitch += camera_input.y * delta * -360
@@ -661,15 +632,16 @@ func _tick(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("dpad_down"):
 		print("Attempting to teleport Mario to the checkpoint flag...")
-		if checkpoint_flag and is_instance_valid(checkpoint_flag):
-			print("TPing Mario!")
-			_restore_mario_to_checkpoint()
-		elif !checkpoint_flag:
-			print("nil Checkpoint.")
-		elif checkpoint_flag and !is_instance_valid(checkpoint_flag):
-			print("Flag found, but couldn't detect it, somehow.")
-		else:
-			print("...?")
+		print("ToDo! Flag is getting reworked as an actual object, and not as a marker for a local value.")
+		#if checkpoint_flag and is_instance_valid(checkpoint_flag):
+		#	print("TPing Mario!")
+		#	_restore_mario_to_checkpoint()
+		#elif !checkpoint_flag:
+		#	print("nil Checkpoint.")
+		#elif checkpoint_flag and !is_instance_valid(checkpoint_flag):
+		#	print("Flag found, but couldn't detect it, somehow.")
+		#else:
+		#	print("...?")
 		
 	
 	if Time.get_ticks_msec() > gravity_set_time + 10000:

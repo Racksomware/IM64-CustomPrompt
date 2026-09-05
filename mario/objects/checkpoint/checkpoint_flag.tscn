@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://unhblhpw06j7"]
+
+[ext_resource type="PackedScene" uid="uid://dfji6vh040y38" path="res://mario/objects/checkpoint/denMark.fbx" id="1_1t0jm"]
+[ext_resource type="Script" uid="uid://3rv8m3genqoy" path="res://mario/objects/checkpoint/checkpoint_flag.gd" id="1_84ip0"]
+
+[sub_resource type="Animation" id="Animation_o0wem"]
+resource_name = "flag_spawn"
+step = 0.0166667
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ahkru"]
+_data = {
+&"flag_spawn": SubResource("Animation_o0wem")
+}
+
+[node name="CheckpointFlag" type="Node3D" unique_id=1875731268]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
+script = ExtResource("1_84ip0")
+
+[node name="denMark" parent="." unique_id=1450199993 instance=ExtResource("1_1t0jm")]
+transform = Transform3D(5.5555553, 0, 0, 0, 5.5555553, 0, 0, 0, 5.5555553, 0, 0, 0)
+
+[node name="FUCKASS_CHECK" parent="denMark" index="0" unique_id=1219354931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03125, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=754387235]
+libraries/ = SubResource("AnimationLibrary_ahkru")
+
+[editable path="denMark"]

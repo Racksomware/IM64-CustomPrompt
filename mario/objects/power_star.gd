@@ -63,7 +63,7 @@ func play_star_spawn_animation(target_pos : Vector3):
 	star_state_time = float(Time.get_ticks_msec()) * 0.001
 	star_old_pos = position
 	star_target_pos = target_pos
-	SOGlobal.play_sound(preload("res://mario/sfx/sm64_star_appears.wav"))
+	SOGlobal.play_sound(preload("res://mario/sfx/marioSounds/sm64_star_appears.wav"))
 	area_3d.set_deferred("monitorable", false)
 	area_3d.set_deferred("monitoring", false)
 

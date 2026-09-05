@@ -30,7 +30,7 @@ func _process(delta):
 		if !on_bust:
 			var our_surface_handler := SOGlobal.current_level_manager.sm_64_surface_objects_handler as SM64SurfaceObjectsHandler
 			our_surface_handler.delete_surface_object(box_collision)
-			SOGlobal.play_sound(preload("res://mario/sfx/sm64_breaking_box.wav"))
+			SOGlobal.play_sound(preload("res://mario/sfx/marioSounds/sm64_breaking_box.wav"))
 		on_bust = true
 		if Time.get_ticks_msec() > last_drop_time + 50 and item_drop_index < contained_items.size():
 			match contained_items[item_drop_index]:
