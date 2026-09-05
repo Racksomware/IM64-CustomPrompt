@@ -45,40 +45,43 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_opxja")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 10.0
 }]
 
-[node name="RedCoin" type="Node3D"]
+[node name="RedCoin" type="Node3D" unique_id=1618676826]
 script = ExtResource("1_fl2pe")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=424354079]
+volume_db = 30.0
+
+[node name="Area3D" type="Area3D" parent="." unique_id=705655159]
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=352280105]
 shape = SubResource("CylinderShape3D_04itl")
 
-[node name="IntersectCast" type="ShapeCast3D" parent="."]
+[node name="IntersectCast" type="ShapeCast3D" parent="." unique_id=115659615]
 enabled = false
 shape = SubResource("CylinderShape3D_bxisd")
 target_position = Vector3(0, 0, 0)
 
-[node name="DropToGroundCast" type="ShapeCast3D" parent="."]
+[node name="DropToGroundCast" type="ShapeCast3D" parent="." unique_id=227202705]
 enabled = false
 shape = SubResource("SphereShape3D_dmeo7")
 target_position = Vector3(0, -2.5, 0)
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=60904101]
 modulate = Color(1, 0.407843, 0.294118, 1)
 pixel_size = 0.02
 billboard = 1
 sprite_frames = SubResource("SpriteFrames_gscpw")
 frame_progress = 0.639718
 
-[node name="Decal" type="Decal" parent="."]
+[node name="Decal" type="Decal" parent="." unique_id=1557860600]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.35, 0)
 size = Vector3(0.5, 4, 0.5)
 texture_albedo = ExtResource("3_e3hga")

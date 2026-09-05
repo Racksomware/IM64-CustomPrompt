@@ -39,37 +39,37 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ucsde")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_1prgb"]
-size = Vector3(0.1, 1, 0.1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_4cb3p"]
+size = Vector3(0.1, 0.85, 0.1)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fis8v"]
 height = 1.35
 radius = 0.85
 
-[node name="CorkBlock" type="Node3D"]
+[node name="CorkBlock" type="Node3D" unique_id=1061478268]
 script = ExtResource("1_j0jgp")
 
-[node name="Cube" type="MeshInstance3D" parent="." groups=["libsm64_surface_objects"]]
+[node name="Cube" type="MeshInstance3D" parent="." unique_id=1005081857 groups=["libsm64_surface_objects"]]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 mesh = SubResource("ArrayMesh_mg5gs")
 skeleton = NodePath("")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1921065089]
 transform = Transform3D(1, 0, 0, 0, 1.1757, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(0.617671, 0, 0, 0, 0.617671, 0, 0, 0, 0.617671, 0.0905351, -0.252858, -0.0125594)
-shape = SubResource("BoxShape3D_1prgb")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1444938799]
+shape = SubResource("BoxShape3D_4cb3p")
+debug_color = Color(0.5911578, 0.40436387, 0.12506765, 0.41960785)
 
-[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+[node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=2080823556]
 enabled = false
 shape = SubResource("CylinderShape3D_fis8v")
 target_position = Vector3(0, -3, 0)
 
-[node name="Decal" type="Decal" parent="."]
+[node name="Decal" type="Decal" parent="." unique_id=1657472121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.65831, 0)
 size = Vector3(2, 8, 2)
 texture_albedo = ExtResource("3_6ol4u")

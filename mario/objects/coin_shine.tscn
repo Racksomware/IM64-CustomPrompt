@@ -48,16 +48,19 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fexwm")
 }],
-"loop": false,
+"loop": 0,
 "name": &"new_animation",
 "speed": 15.0
 }]
 
-[node name="CoinShine" type="AnimatedSprite3D"]
+[node name="CoinShine" type="AnimatedSprite3D" unique_id=1275091309]
 pixel_size = 0.02
 billboard = 1
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_vq45l")
 animation = &"new_animation"
+frame = 5
+frame_progress = 1.0
 script = ExtResource("2_lo0sm")
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

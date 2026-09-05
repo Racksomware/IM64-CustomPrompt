@@ -2,10 +2,13 @@
 class_name SM64Mario
 extends Node3D
 
+signal newFlagPos
+
 @onready var audio_stream_player = $AudioStreamPlayer
 @onready var mario_collision := $MarioCollision as Area3D
 @onready var collision_cylinder := $MarioCollision/CollisionCylinder.shape as CylinderShape3D
 
+var checkpointObject = null
 ## Node that instances a Mario into a scenario
 
 ## Value that represents Mario being at full health
@@ -73,6 +76,7 @@ var action: int:
 			return
 		_internal.set_action(value)
 		_action = value
+
 ## Mario's action as StringName
 var action_name: StringName:
 	get:
@@ -82,6 +86,7 @@ var _flags := 0x0:
 	set(value):
 		_flags = value
 		flags_changed.emit(_flags)
+
 ## Mario's state flags
 var flags: int:
 	get:
@@ -93,6 +98,7 @@ var flags: int:
 		_flags = value
 
 var _velocity := Vector3()
+
 ## Mario's velocity in the libsm64 world
 var velocity: Vector3:
 	get:
@@ -214,6 +220,7 @@ var _paused : bool = false
 
 
 func _ready() -> void:
+	DebugDraw2D.create_fps_graph("FPS")
 	_mesh_instance = MeshInstance3D.new()
 	add_child(_mesh_instance)
 	_mesh_instance.top_level = true
@@ -441,13 +448,25 @@ func _create_checkpoint() -> void:
 	spawn_line_cast.force_raycast_update()
 	if !spawn_line_cast.is_colliding():
 		return
+		
 	var hit_block := spawn_line_cast.get_collider().get_parent() as LevelBlock
 	if hit_block.current_move_type != LevelBlock.move_type.NONE:
 		return
+		
+	if !checkpointObject:
+		checkpointObject = preload("res://mario/objects/checkpoint/checkpoint_flag.tscn").instantiate()
+		newFlagPos.connect(checkpointObject.forkenNewFlagz)
+		checkpointObject.position = position
+		checkpointObject.top_level = true
+		add_child(checkpointObject)
+		newFlagPos.emit()
+	else:
+		checkpointObject.position = position
+		newFlagPos.emit()
 
 func _restore_mario_to_checkpoint() -> void:
 	num_checkpoints_used += 1
-	#teleport(checkpoint_pos)
+	teleport(checkpointObject.position)
 	_cam_target_height = position.y
 	#set_angle(Vector3.FORWARD.rotated(Vector3.UP, checkpoint_facing))
 	velocity = Vector3.ZERO
@@ -479,7 +498,7 @@ func _calculate_gameplay_camera(delta : float):
 	if Input.is_action_just_pressed("cam_stick_up"):
 		_cam_zoom -= 1
 	
-	_cam_zoom = clampi(_cam_zoom, 0, 2)
+	_cam_zoom = clampi(_cam_zoom, -1, 2)
 	
 	var target_height : float = 10
 	var target_dist : float = 5
@@ -632,16 +651,15 @@ func _tick(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("dpad_down"):
 		print("Attempting to teleport Mario to the checkpoint flag...")
-		print("ToDo! Flag is getting reworked as an actual object, and not as a marker for a local value.")
-		#if checkpoint_flag and is_instance_valid(checkpoint_flag):
-		#	print("TPing Mario!")
-		#	_restore_mario_to_checkpoint()
-		#elif !checkpoint_flag:
-		#	print("nil Checkpoint.")
-		#elif checkpoint_flag and !is_instance_valid(checkpoint_flag):
-		#	print("Flag found, but couldn't detect it, somehow.")
-		#else:
-		#	print("...?")
+		if checkpointObject and is_instance_valid(checkpointObject):
+			print("TPing Mario!")
+			_restore_mario_to_checkpoint()
+		elif !checkpointObject:
+			print("nil Checkpoint.")
+		elif checkpointObject and !is_instance_valid(checkpointObject):
+			print("Flag found, but couldn't detect it.")
+		else:
+			print("...?")
 		
 	
 	if Time.get_ticks_msec() > gravity_set_time + 10000:

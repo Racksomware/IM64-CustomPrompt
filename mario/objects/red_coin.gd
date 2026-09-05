@@ -1,8 +1,7 @@
 class_name RedCoin extends Node3D
 
 @onready var area_3d := $Area3D as Area3D
-var coin_value : int = 2
-var coin_sound : AudioStream = preload("res://mario/sfx/marioSounds/sm64_red_coin_1.wav")
+@onready var audioPlayer : AudioStreamPlayer3D = $AudioStreamPlayer3D
 @onready var animated_sprite_3d = $AnimatedSprite3D
 @onready var intersect_cast = $IntersectCast
 @onready var drop_to_ground_cast = $DropToGroundCast
@@ -10,6 +9,12 @@ var physics : bool = false
 var velocity : Vector3 = Vector3.ZERO
 var drop_to_ground : bool = false
 var destroy_on_retry : bool = false
+
+var coin_value : int = 2
+var coin_sound : AudioStream = preload("res://mario/sfx/pingas-richard-89282878.mp3")
+
+var origPitch : float = 1.0
+var jokePitch : float = 1.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -56,7 +61,13 @@ func _physics_process(delta):
 func _collect(num_red_coins : int):
 	set_deferred("monitorable", false)
 	set_deferred("monitoring", false)
-	SOGlobal.play_sound(coin_sound, 0, 2.0 ** (float(num_red_coins - 1) / 12.0))
+	audioPlayer.stream = coin_sound
+	print(num_red_coins)
+	if num_red_coins > 1:
+		jokePitch = num_red_coins*2.95
+		print(jokePitch)
+		audioPlayer.pitch_scale = jokePitch
+	audioPlayer.play()
 	visible = false
 	var new_shine := preload("res://mario/objects/coin_shine.tscn").instantiate() as AnimatedSprite3D
 	var num := preload("res://mario/other/num.tscn").instantiate() as AnimatedSprite3D
@@ -71,6 +82,7 @@ func _respawn():
 	await get_tree().create_timer(0.1).timeout
 	if destroy_on_retry:
 		queue_free()
+		audioPlayer.pitch_scale = origPitch
 		return
 	area_3d.monitorable = true
 	area_3d.monitoring = true

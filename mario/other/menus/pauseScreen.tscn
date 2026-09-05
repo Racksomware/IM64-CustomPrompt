@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b3woha0ojlago"]
 
 [ext_resource type="Script" uid="uid://bvlrv1glg0yr3" path="res://mario/other/menus/PauseScreen.gd" id="1_h87e5"]
+[ext_resource type="AudioStream" uid="uid://du6jly7r05rmb" path="res://soundalerts/assistance.wav" id="2_p5jvy"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_4cb3p"]
 
@@ -12,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h87e5")
+mainAudio = ExtResource("2_p5jvy")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=271147574]
 stream = SubResource("AudioStreamPolyphonic_4cb3p")

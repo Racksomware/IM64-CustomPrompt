@@ -1,28 +1,24 @@
 [gd_scene format=3 uid="uid://unhblhpw06j7"]
 
-[ext_resource type="PackedScene" uid="uid://dfji6vh040y38" path="res://mario/objects/checkpoint/denMark.fbx" id="1_1t0jm"]
 [ext_resource type="Script" uid="uid://3rv8m3genqoy" path="res://mario/objects/checkpoint/checkpoint_flag.gd" id="1_84ip0"]
-
-[sub_resource type="Animation" id="Animation_o0wem"]
-resource_name = "flag_spawn"
-step = 0.0166667
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ahkru"]
-_data = {
-&"flag_spawn": SubResource("Animation_o0wem")
-}
+[ext_resource type="PackedScene" uid="uid://b4ey7xxbm1qqe" path="res://mario/objects/checkpoint/denMark.gltf" id="2_84ip0"]
+[ext_resource type="AudioStream" uid="uid://c6qyalkmep85h" path="res://mario/sfx/invSounds/UIWoodHit.wav" id="2_ebxs5"]
+[ext_resource type="Texture2D" uid="uid://dhp0h2p7egisy" path="res://mario/textures/shadow.png" id="3_nq5x8"]
 
 [node name="CheckpointFlag" type="Node3D" unique_id=1875731268]
 transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
 script = ExtResource("1_84ip0")
 
-[node name="denMark" parent="." unique_id=1450199993 instance=ExtResource("1_1t0jm")]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1880690084]
+transform = Transform3D(5.5555553, 0, 0, 0, 5.5555553, 0, 0, 0, 5.5555553, 0, 8.943236, 0)
+stream = ExtResource("2_ebxs5")
+
+[node name="Decal" type="Decal" parent="." unique_id=602363652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15.5, 0)
+size = Vector3(8, 32, 8)
+texture_albedo = ExtResource("3_nq5x8")
+normal_fade = 0.5
+upper_fade = 1e-05
+
+[node name="blockbench_export" parent="." unique_id=1477946448 instance=ExtResource("2_84ip0")]
 transform = Transform3D(5.5555553, 0, 0, 0, 5.5555553, 0, 0, 0, 5.5555553, 0, 0, 0)
-
-[node name="FUCKASS_CHECK" parent="denMark" index="0" unique_id=1219354931]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03125, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=754387235]
-libraries/ = SubResource("AnimationLibrary_ahkru")
-
-[editable path="denMark"]

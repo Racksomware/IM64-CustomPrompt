@@ -1,12 +1,16 @@
 extends Node3D
 
+@onready var audioPlayerThing : AudioStreamPlayer3D = $AudioStreamPlayer3D
+
 var checkpointWorldPos : Vector3 = Vector3.ZERO
 var checkpointWorldRot : float = 0
-var checkpointObject = self
+
+func forkenNewFlagz():
+	print("Testuz")
+	audioPlayerThing.play()
 
 func _ready():
-	print("Flag Spawned")
-	SOGlobal.play_sound(preload("res://mario/sfx/sm64_drop_into_course.wav"))
+	print("Flag spawned")
 
 func _process(delta) -> void:
-	print("FlagExists")
+	pass
