@@ -50,20 +50,13 @@ signal health_wedges_changed(health_wedges: int)
 				tick_process_mode = value
 
 @export_group("Input Actions")
-## Action equivalent to pushing the joystick to the left
-@export var stick_left := &"mario_stick_left"
-## Action equivalent to pushing the joystick to the right
-@export var stick_right := &"mario_stick_right"
-## Action equivalent to pushing the joystick upwards
-@export var stick_up := &"mario_stick_up"
-## Action equivalent to pushing the joystick downwards
-@export var stick_down := &"mario_stick_down"
-## Action equivalent to pushing the A button
-@export var input_a := &"mario_a"
-## Action equivalent to pushing the B button
-@export var input_b := &"mario_b"
-## Action equivalent to pushing the Z button
-@export var input_z := &"mario_z"
+@export var stick_left := &"mario_stick_left" 		## Action equivalent to pushing the joystick to the left
+@export var stick_right := &"mario_stick_right" 	## Action equivalent to pushing the joystick to the right
+@export var stick_up := &"mario_stick_up" 			## Action equivalent to pushing the joystick upwards
+@export var stick_down := &"mario_stick_down" 		## Action equivalent to pushing the joystick downwards
+@export var input_a := &"mario_a" 					## Action equivalent to pushing the A button
+@export var input_b := &"mario_b" 					## Action equivalent to pushing the B button
+@export var input_z := &"mario_z" 					## Action equivalent to pushing the Z button
 
 var _internal := SM64MarioInternal.new()
 
@@ -161,7 +154,7 @@ var invicibility_time: float:
 		_internal.set_invincibility(value)
 		_invicibility_time = value
 
-# var hurt_counter := 0
+var hurt_counter := 0
 
 #var _lives := 4:
 #	set(value):
@@ -193,29 +186,29 @@ var gas_level := -100000.0:
 		_internal.set_gas_level(value)
 		gas_level = value
 
-var _mesh_instance: MeshInstance3D
-var _mesh: ArrayMesh
-var _default_material := preload("res://addons/libsm64-godot/mario/mario_default_material.tres") as StandardMaterial3D
-var _vanish_material := preload("res://addons/libsm64-godot/mario/mario_vanish_material.tres") as StandardMaterial3D
-var _metal_material := preload("res://addons/libsm64-godot/mario/mario_metal_material.tres") as StandardMaterial3D
-var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") as StandardMaterial3D
-var _material: StandardMaterial3D
-var _id := -1
+var _mesh_instance: 		MeshInstance3D
+var _mesh: 					ArrayMesh
+var _default_material 		:= preload("res://addons/libsm64-godot/mario/mario_default_material.tres") 	as StandardMaterial3D
+var _vanish_material 		:= preload("res://addons/libsm64-godot/mario/mario_vanish_material.tres") 	as StandardMaterial3D
+var _metal_material 		:= preload("res://addons/libsm64-godot/mario/mario_metal_material.tres") 	as StandardMaterial3D
+var _wing_material 			:= preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") 	as StandardMaterial3D
+var _material: 				StandardMaterial3D
+var _id 					:= -1
 # FIXME: SM64Input stopped working in beta 15
-var _cam_rotation := 0.0
-var _cam_rotation_target := 0.0
-var _cam_zoom := 1
-var _cam_tilt := 0.0
-var _cam_height := 0.0
-var _cam_target_height := 0.0
-var _cam_dist := 0.0
-var _cam_target := Vector3(0, 0, 0)
-var _cam_dir := Vector3(0, 0, 1)
-var _cam_target_dist := 0.0
-var _mario_input := {}
-@onready var seed_label := $SeedLabel as Label
-@onready var coin_counter = $CoinCounter
-@onready var power_disp = $PowerDisp
+var _cam_rotation 			:= 0.0
+var _cam_rotation_target 	:= 0.0
+var _cam_zoom 				:= 1
+var _cam_tilt 				:= 0.0
+var _cam_height 			:= 0.0
+var _cam_target_height 		:= 0.0
+var _cam_dist 				:= 0.0
+var _cam_target 			:= Vector3(0, 0, 0)
+var _cam_dir 				:= Vector3(0, 0, 1)
+var _cam_target_dist 		:= 0.0
+var _mario_input 			:= {}
+@onready var seed_label 		:= $SeedLabel as Label
+@onready var coin_counter 		= $CoinCounter
+@onready var power_disp 		= $PowerDisp
 @onready var health_wedges_disp = $PowerDisp/HealthWedges
 
 var _paused : bool = false
@@ -249,13 +242,6 @@ func _process(delta: float) -> void:
 	#DebugDraw2D.set_text("COIN COUNT", current_coin_count)
 	coin_counter.text = str(current_coin_count)
 	health_wedges_disp.material.set_shader_parameter("wedges", health_wedges)
-	star_arrow.global_position = camera.position + camera.basis.z * -0.2 + camera.basis.y * 0.065
-	star_mesh.global_position = star_arrow.global_position
-	star_mesh.global_rotation_degrees = camera.rotation_degrees + Vector3(90, 0, 0)
-	star_mesh.scale = Vector3(0.012, 0.012, 0.012)
-	star_mesh.basis = star_mesh.basis.rotated(star_mesh.basis.z.normalized(), float(Time.get_ticks_msec()) * 0.001)
-	star_arrow.scale = Vector3(0.0035, 0.0035, 0.0035)
-	star_arrow.look_at(SOGlobal.main_star_pos)
 	
 	#DebugDraw3D.draw_sphere(position, 0.1, Color(1, 1, 1), delta)
 
@@ -373,17 +359,16 @@ var current_red_coin_count : int = 0
 func _get_power_star(in_star_id : String) -> void:
 	finish_time = Time.get_ticks_msec()
 	var time_in_seconds : float = float(finish_time - start_time) * 0.001
-	SOGlobal.save_data.try_submit_save_block(SOGlobal.current_seed, in_star_id, time_in_seconds, current_coin_count, current_red_coin_count, num_checkpoints_used, true)
 	_internal.set_action(SM64MarioAction.FALL_AFTER_STAR_GRAB)
 	audio_stream_player.play()
 	var saysound_playback : AudioStreamPlaybackPolyphonic = audio_stream_player.get_stream_playback()
-	saysound_playback.play_stream(preload("res://mario/enter_painting.WAV"), 0, -8, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/enter_painting.WAV"), 0, -8, 1.0)
 	await get_tree().create_timer(0.5).timeout
-	saysound_playback.play_stream(preload("res://mario/star_get.wav"), 0, 0, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/star_get.wav"), 0, 0, 1.0)
 	#_internal.set_action(SM64MarioAction.FALL_AFTER_STAR_GRAB)
 	set_angle((camera.position - position).normalized())
 	await get_tree().create_timer(1.2).timeout
-	saysound_playback.play_stream(preload("res://mario/here_we_go.wav"), 0, 10, 1.0)
+	saysound_playback.play_stream(preload("res://mario/sfx/here_we_go.wav"), 0, 10, 1.0)
 
 var ready_to_play : bool = false
 var preview_cam_yaw : float = 0
@@ -473,7 +458,7 @@ func _create_checkpoint() -> void:
 	checkpoint_facing = face_angle
 	if checkpoint_flag and is_instance_valid(checkpoint_flag):
 		checkpoint_flag.queue_free()
-	checkpoint_flag = preload("res://mario/checkpoint_flag.tscn").instantiate()
+	checkpoint_flag = preload("res://mario/objects/checkpoint_flag.tscn").instantiate()
 	checkpoint_flag.position = checkpoint_pos
 	SOGlobal.add_child(checkpoint_flag)
 	checkpoint_flag.get_node("AnimationPlayer").play("flag_spawn")
@@ -572,7 +557,7 @@ func _tick(delta: float) -> void:
 			_restore_mario_to_checkpoint()
 		else: if !needs_respawning:
 			needs_respawning = true
-			_respawn_mario(preload("res://mario/enter_painting.WAV"))
+			_respawn_mario(preload("res://mario/sfx/enter_painting.WAV"))
 	
 	if _action == SM64MarioAction.STAR_DANCE_EXIT and !_paused and ready_to_play:
 		if Input.is_action_just_pressed("mario_a"):
@@ -604,7 +589,7 @@ func _tick(delta: float) -> void:
 	time_since_start += delta
 	
 	if Input.is_action_just_pressed("start_button"):
-		var pause_menu = preload("res://mario/mario_pause_menu.tscn").instantiate()
+		var pause_menu = preload("res://mario/other/menus/pauseScreen.tscn").instantiate()
 		SOGlobal.add_child(pause_menu)
 		_paused = true
 		return
@@ -634,7 +619,7 @@ func _tick(delta: float) -> void:
 		if Input.is_action_just_pressed("mario_a"):
 			ready_to_play = true
 			start_time = Time.get_ticks_msec()
-			_respawn_mario(preload("res://mario/enter_painting.WAV"))
+			_respawn_mario(preload("res://mario/sfx/enter_painting.WAV"))
 		preview_cam_pitch += Input.get_axis(stick_up, stick_down) * delta * 90
 		preview_cam_yaw += Input.get_axis(stick_left, stick_right) * delta * 90
 		preview_cam_pan_pitch += camera_input.y * delta * -360

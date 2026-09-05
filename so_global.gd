@@ -1,32 +1,30 @@
 extends Node
 
-var level_bounds : AABB = AABB()
-var level_meshes : Array[LevelBlock] = []
-var level_start_time : int = 0
-var current_mario : SM64Mario
+var level_bounds 				: AABB = AABB()
+var level_meshes 				: Array[LevelBlock] = []
+var level_start_time 			: int = 0
+var current_mario 				: SM64Mario
 var current_level_manager
-var current_seed : String
-var block_material := preload("res://mario/block_material.tres") as ShaderMaterial
-var sky_material := preload("res://mario/sky_material.tres") as ShaderMaterial
-var global_sound := AudioStreamPlayer.new() as AudioStreamPlayer
-var global_sound_stream := AudioStreamPolyphonic.new() as AudioStreamPolyphonic
-var start_angle := 0.0
-var save_data := MarioSaveFile.new()
-var total_coins : int = 0
-var total_red_coins : int = 0
-var main_star_pos : Vector3 = Vector3.ZERO
-var restart_desired : bool = false
-var inner_deadzone : float = 0.05
-var outer_deadzone : float = 0.95
-var flip_x : bool = true
+var current_seed 				: String
+var block_material 				:= preload("res://mario/other/mirror_block_material.tres") as ShaderMaterial
+var sky_material 				:= preload("res://mario/sky_material.tres") as ShaderMaterial
+var global_sound 				:= AudioStreamPlayer.new() as AudioStreamPlayer
+var global_sound_stream 		:= AudioStreamPolyphonic.new() as AudioStreamPolyphonic
+var start_angle 				:= 0.0
+var total_coins 				: int = 0
+var total_red_coins 			: int = 0
+var main_star_pos 				: Vector3 = Vector3.ZERO
+var restart_desired 			: bool = false
+var inner_deadzone 				: float = 0.05
+var outer_deadzone 				: float = 0.95
+var flip_x 						: bool = true
 
 func play_sound(inSound, volume : float = 0, pitch : float = 1) -> void:
 	var playback : AudioStreamPlaybackPolyphonic = global_sound.get_stream_playback()
 	playback.play_stream(inSound, 0, volume, pitch)
 
 func generate_power_star(in_star_id : String, in_pos : Vector3, in_target_pos : Vector3 = Vector3.ZERO) -> PowerStar:
-	var new_star : PowerStar = preload("res://mario/power_star.tscn").instantiate()
-	new_star.star_gotten = save_data.is_star_collected(current_seed, in_star_id)
+	var new_star : PowerStar = preload("res://mario/objects/power_star.tscn").instantiate()
 	print(new_star.star_gotten)
 	new_star.position = in_pos
 	new_star.star_id = in_star_id
@@ -36,7 +34,7 @@ func generate_power_star(in_star_id : String, in_pos : Vector3, in_target_pos : 
 	return new_star
 
 func generate_cork_box_with_contents(in_pos : Vector3, contents : Array) -> CorkBox:
-	var new_box : CorkBox = preload("res://mario/cork_block.tscn").instantiate()
+	var new_box : CorkBox = preload("res://mario/objects/cork_block.tscn").instantiate()
 	new_box.position = in_pos
 	new_box.contained_items = contents
 	add_child(new_box)
@@ -45,7 +43,7 @@ func generate_cork_box_with_contents(in_pos : Vector3, contents : Array) -> Cork
 	#var new_box : C
 
 func generate_yellow_coin_at_pos(inPos : Vector3, in_drop_to_ground : bool = true, in_physics : bool = false, in_velocity : Vector3 = Vector3.ZERO) -> Coin:
-	var new_coin := preload("res://mario/coin.tscn").instantiate() as Coin
+	var new_coin := preload("res://mario/objects/coin.tscn").instantiate() as Coin
 	new_coin.position = inPos
 	new_coin.velocity = in_velocity
 	new_coin.drop_to_ground = in_drop_to_ground
@@ -55,7 +53,7 @@ func generate_yellow_coin_at_pos(inPos : Vector3, in_drop_to_ground : bool = tru
 	return new_coin
 	
 func generate_red_coin_at_pos(inPos : Vector3, in_drop_to_ground : bool = true, in_physics : bool = false, in_velocity : Vector3 = Vector3.ZERO) -> RedCoin:
-	var new_coin := preload("res://mario/red_coin.tscn").instantiate() as RedCoin
+	var new_coin := preload("res://mario/objects/red_coin.tscn").instantiate() as RedCoin
 	new_coin.position = inPos
 	new_coin.velocity = in_velocity
 	new_coin.drop_to_ground = in_drop_to_ground
@@ -98,7 +96,7 @@ func generate_block_from_pos_and_size(inPos : Vector3, inSize : Vector3, north_s
 				var dir_one : Vector3 = (mesh_faces[i - 1] - mesh_faces[i])
 				var dir_two : Vector3 = (mesh_faces[i - 2] - mesh_faces[i])
 				mesh_normals[i] = dir_one.cross(dir_two).normalized()
-		#DebugDraw3D.draw_arrow_line(mesh_faces[i] + new_block.position, mesh_faces[i] + mesh_normals[i] + new_block.position, Color(1, 0, 0), 0.25, true, 10)
+		DebugDraw3D.draw_arrow_line(mesh_faces[i] + new_block.position, mesh_faces[i] + mesh_normals[i] + new_block.position, Color(1, 0, 0), 0.25, true, 10)
 	var arr_mesh : ArrayMesh = ArrayMesh.new()
 	var arrays := []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -195,24 +193,13 @@ func _ready():
 	add_child(global_sound)
 	global_sound.stream = global_sound_stream
 	global_sound.play()
-	print("INITIAL BINDINGS!")
-	for i in InputMap.get_actions().size():
-		var action := InputMap.get_actions()[i]
-		if action.begins_with("ui"):
-			continue
-		print(action)
-		for k in InputMap.action_get_events(action).size():
-			var event = InputMap.action_get_events(action)[k]
-			print(event)
-			print(event.device)
-	save_data.load_game()
+	print("Sounds loaded.")
 
 
 var unfocused := false
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		SOGlobal.save_data.save_game()
 		get_tree().quit()
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT: 
 		unfocused = true

@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://b3sy802m6p2s1"]
 
 [ext_resource type="Script" uid="uid://b2rjv2cmhisg7" path="res://scene_base.gd" id="1_uyiya"]
-[ext_resource type="PackedScene" uid="uid://s7xxl4yeqeyk" path="res://mario/start.glb" id="3_djfti"]
+[ext_resource type="PackedScene" uid="uid://s7xxl4yeqeyk" path="res://mario/objects/start.glb" id="3_djfti"]
 [ext_resource type="Script" uid="uid://ds4fp0x2spd1p" path="res://addons/libsm64-godot/components/sm64_surface_properties_component.gd" id="3_kite3"]
 [ext_resource type="Script" uid="uid://bg7j14xililfm" path="res://addons/libsm64-godot/handlers/sm64_static_surfaces_handler.gd" id="3_q7bj6"]
 [ext_resource type="Shader" uid="uid://ieetk3wiqxe3" path="res://death_plane.gdshader" id="3_r8jh6"]
 [ext_resource type="Script" uid="uid://dndsi0x6nw47o" path="res://addons/libsm64-godot/handlers/sm64_surface_objects_handler.gd" id="4_wwkch"]
 [ext_resource type="Material" uid="uid://bbflq1vcknt2x" path="res://mario/sky_material.tres" id="4_x2twq"]
 [ext_resource type="PackedScene" uid="uid://cg8l4angkunu5" path="res://mario/random_mario.tscn" id="10_1ybnx"]
-[ext_resource type="Material" uid="uid://bid7sibxqlpii" path="res://mario/block_material.tres" id="12_8xlox"]
+[ext_resource type="Material" uid="uid://bid7sibxqlpii" path="res://mario/objects/block_material.tres" id="12_8xlox"]
 
 [sub_resource type="Sky" id="Sky_6d86y"]
 sky_material = ExtResource("4_x2twq")
@@ -29,6 +29,18 @@ fog_aerial_perspective = 1.0
 fog_sky_affect = 0.0
 adjustment_contrast = 5.43
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_brwxj"]
+material = ExtResource("12_8xlox")
+top_radius = 6.0
+bottom_radius = 9.53
+height = 8.0
+radial_segments = 142
+rings = 128
+
+[sub_resource type="BoxMesh" id="BoxMesh_sq71t"]
+material = ExtResource("12_8xlox")
+size = Vector3(4, 4, 8)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gwh77"]
 render_priority = 0
 shader = ExtResource("3_r8jh6")
@@ -41,18 +53,6 @@ subdivide_depth = 16
 
 [sub_resource type="SM64SurfaceProperties" id="SM64SurfaceProperties_hhvd1"]
 surface_type = 5
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_brwxj"]
-material = ExtResource("12_8xlox")
-top_radius = 6.0
-bottom_radius = 9.53
-height = 8.0
-radial_segments = 142
-rings = 128
-
-[sub_resource type="BoxMesh" id="BoxMesh_sq71t"]
-material = ExtResource("12_8xlox")
-size = Vector3(4, 4, 8)
 
 [node name="Node3D" type="Node3D" unique_id=146643984]
 script = ExtResource("1_uyiya")
@@ -69,14 +69,6 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1372663063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
 fov = 45.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1577249663 groups=["libsm64_static_surfaces"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -48, 0)
-mesh = SubResource("PlaneMesh_pvrxd")
-
-[node name="SM64SurfacePropertiesComponent" type="Node" parent="MeshInstance3D" unique_id=852199262]
-script = ExtResource("3_kite3")
-surface_properties = SubResource("SM64SurfaceProperties_hhvd1")
 
 [node name="SM64StaticSurfaceHandler" type="Node" parent="." unique_id=2105219768]
 script = ExtResource("3_q7bj6")
@@ -95,3 +87,11 @@ mesh = SubResource("BoxMesh_sq71t")
 
 [node name="RandomMario" parent="." unique_id=469458417 node_paths=PackedStringArray("camera") instance=ExtResource("10_1ybnx")]
 camera = NodePath("../Camera3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1524300083 groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -48, 0)
+mesh = SubResource("PlaneMesh_pvrxd")
+
+[node name="SM64SurfacePropertiesComponent" type="Node" parent="MeshInstance3D" unique_id=490545432]
+script = ExtResource("3_kite3")
+surface_properties = SubResource("SM64SurfaceProperties_hhvd1")

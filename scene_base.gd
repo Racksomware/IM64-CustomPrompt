@@ -572,8 +572,6 @@ func _create_mario_world(useSeed = str(randi())) -> void:
 	
 	await get_tree().create_timer(0.2).timeout
 	
-	SOGlobal.save_data.try_submit_save_block(useSeed)
-	
 	sm_64_static_surface_handler.load_static_surfaces()
 	sm_64_surface_objects_handler.load_all_surface_objects()
 	

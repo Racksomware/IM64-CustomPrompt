@@ -9,4 +9,3 @@ class_name AnimKeyframe extends Resource
 	set(in_euler):
 		rotation = Basis.from_euler(in_euler)
 		rotation_euler = in_euler
-	

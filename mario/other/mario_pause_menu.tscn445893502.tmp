@@ -1,0 +1,221 @@
+[gd_scene format=3 uid="uid://bdc07kwcxglgb"]
+
+[ext_resource type="Script" uid="uid://bfiueqs43cg7r" path="res://mario/other/mario_pause_menu.gd" id="1_muu6i"]
+[ext_resource type="AudioStream" uid="uid://vuyuw4rpqy3a" path="res://mario/sfx/sm64_pause.wav" id="2_28vdd"]
+[ext_resource type="LabelSettings" uid="uid://62qg1huhgl2d" path="res://fonts/labelSetting_RWBase.tres" id="2_u10jc"]
+[ext_resource type="FontFile" uid="uid://dc5fnpxu1cb5h" path="res://fonts/rain-world-menu-font-webfont.otf" id="4_hiypm"]
+
+[node name="Control" type="Control" unique_id=2021116917]
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_muu6i")
+
+[node name="RestartRequest" type="Label" parent="." unique_id=1255369929]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022
+anchor_top = 0.97
+anchor_right = 0.022
+anchor_bottom = 0.97
+offset_left = -0.716003
+offset_top = -27.92
+offset_right = 401.284
+offset_bottom = 0.0799561
+grow_horizontal = 2
+grow_vertical = 0
+text = "* Some changed settings require a restart."
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=414928195]
+stream = ExtResource("2_28vdd")
+volume_db = -10.0
+autoplay = true
+
+[node name="Control" type="Control" parent="." unique_id=716225496]
+layout_mode = 1
+anchor_left = 0.312
+anchor_top = 0.333
+anchor_right = 0.687
+anchor_bottom = 0.667
+offset_left = 0.639984
+offset_top = -119.76
+offset_right = 0.640015
+offset_bottom = -10.24
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=1375189419]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.470588)
+
+[node name="Control" type="Control" parent="Control/ColorRect" unique_id=1970012922]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelContainer" type="VBoxContainer" parent="Control" unique_id=1097273226]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.071
+anchor_right = 1.0
+anchor_bottom = 0.925
+offset_top = -0.0400009
+offset_bottom = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="ResumeLabel" type="Label" parent="Control/LabelContainer" unique_id=543307617]
+layout_mode = 2
+text = "Resume"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="RespawnLabel" type="Label" parent="Control/LabelContainer" unique_id=1075108734]
+layout_mode = 2
+text = "Retry"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="GenerateNewLevelLabel" type="Label" parent="Control/LabelContainer" unique_id=2084799573]
+layout_mode = 2
+text = "Generate Random New Level"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="ViewStageLabel" type="Label" parent="Control/LabelContainer" unique_id=1796194466]
+layout_mode = 2
+text = "View Level"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="HistoryLabel" type="Label" parent="Control/LabelContainer" unique_id=1618611014]
+layout_mode = 2
+text = "History"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="SettingsLabel" type="Label" parent="Control/LabelContainer" unique_id=794293742]
+layout_mode = 2
+text = "Settings"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="ExitLabel" type="Label" parent="Control/LabelContainer" unique_id=1614644990]
+layout_mode = 2
+text = "Exit"
+label_settings = ExtResource("2_u10jc")
+horizontal_alignment = 1
+
+[node name="StatDisplay" type="Control" parent="Control" unique_id=1131109307]
+layout_mode = 1
+anchor_top = 0.895
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.186249
+offset_bottom = 0.222076
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/StatDisplay" unique_id=83959459]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -14.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="StarCounter" type="Label" parent="Control/StatDisplay/HBoxContainer" unique_id=199435711]
+layout_mode = 2
+size_flags_vertical = 1
+text = "* x 47"
+label_settings = ExtResource("2_u10jc")
+
+[node name="CoinCounter" type="Label" parent="Control/StatDisplay/HBoxContainer" unique_id=1006131178]
+layout_mode = 2
+size_flags_vertical = 1
+text = "$ x 5,493"
+label_settings = ExtResource("2_u10jc")
+
+[node name="RedCoinCounter" type="Label" parent="Control/StatDisplay/HBoxContainer" unique_id=1965195949]
+layout_mode = 2
+size_flags_vertical = 1
+text = "& x 47"
+label_settings = ExtResource("2_u10jc")
+
+[node name="GeneratePrompt" type="Control" parent="." unique_id=1663744676]
+layout_mode = 1
+anchor_left = 0.312
+anchor_top = 0.68
+anchor_right = 0.687
+anchor_bottom = 0.717
+offset_left = 1.27997
+offset_top = -0.160034
+offset_right = 1.27991
+offset_bottom = 0.520996
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="GeneratePrompt" unique_id=425301394]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.464
+offset_right = 9.15527e-05
+offset_bottom = 0.00203323
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.470588)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GeneratePrompt/ColorRect" unique_id=1675128411]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SeedButton" type="Button" parent="GeneratePrompt/ColorRect/HBoxContainer" unique_id=160636337]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_hiypm")
+theme_override_font_sizes/font_size = 24
+text = "My lucky seed is..."
+flat = true
+
+[node name="SeedText" type="LineEdit" parent="GeneratePrompt/ColorRect/HBoxContainer" unique_id=1029391935]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("4_hiypm")
+theme_override_font_sizes/font_size = 24
+placeholder_text = "[Insert number here]"
+max_length = 32
+context_menu_enabled = false
+drag_and_drop_selection_enabled = false
+flat = true
+caret_blink = true
+
+[connection signal="pressed" from="GeneratePrompt/ColorRect/HBoxContainer/SeedButton" to="." method="_on_seed_button_pressed"]
+[connection signal="text_submitted" from="GeneratePrompt/ColorRect/HBoxContainer/SeedText" to="." method="_on_seed_text_text_submitted"]

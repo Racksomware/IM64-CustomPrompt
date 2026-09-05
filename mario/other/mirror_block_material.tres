@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bnkwm7s8dfa0h"]
+
+[ext_resource type="Shader" uid="uid://c6we3vof4ovxn" path="res://mario/objects/block_material.gdshader" id="1_pd53s"]
+[ext_resource type="Texture2D" uid="uid://bv5hj342vy6tc" path="res://mario/textures/debug_floor.png" id="2_jlah4"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_pd53s")
+shader_parameter/texture_albedo = ExtResource("2_jlah4")
+shader_parameter/color_multiply = Vector3(0.2, 0.3, 1)
+shader_parameter/outer_time = 0.0

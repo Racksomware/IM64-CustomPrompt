@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://b3woha0ojlago"]
+
+[ext_resource type="Script" uid="uid://bvlrv1glg0yr3" path="res://mario/other/menus/PauseScreen.gd" id="1_h87e5"]
+
+[node name="PauseScreen" type="Control" unique_id=1163693051]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_h87e5")
+
+[node name="LowerSection" type="Control" parent="." unique_id=1514567394]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -59.0
+offset_right = 1280.0
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="LowerSection" unique_id=1013065182]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="UpperSection" type="Control" parent="." unique_id=11477615]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 50.0
+
+[node name="ColorRect" type="ColorRect" parent="UpperSection" unique_id=1728786029]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://duckq2p0ves7u"]
+
+[ext_resource type="Script" uid="uid://ck7v6y1fmbtv8" path="res://mario/objects/coin.gd" id="1_wgcfa"]
+[ext_resource type="Texture2D" uid="uid://8it5vdv7c2ac" path="res://mario/objects/coin_sheet.png" id="2_d3ouk"]
+[ext_resource type="Texture2D" uid="uid://dhp0h2p7egisy" path="res://mario/textures/shadow.png" id="3_wgcfa"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_04itl"]
+height = 1.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bxisd"]
+height = 1.2
+radius = 0.45
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dmeo7"]
+radius = 0.1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8biof"]
+atlas = ExtResource("2_d3ouk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4kxw"]
+atlas = ExtResource("2_d3ouk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bwolp"]
+atlas = ExtResource("2_d3ouk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opxja"]
+atlas = ExtResource("2_d3ouk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gscpw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8biof")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o4kxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bwolp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opxja")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Coin" type="Node3D" unique_id=674546144]
+script = ExtResource("1_wgcfa")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1101889392]
+collision_layer = 2
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1234655002]
+shape = SubResource("CylinderShape3D_04itl")
+
+[node name="IntersectCast" type="ShapeCast3D" parent="." unique_id=1668702603]
+enabled = false
+shape = SubResource("CylinderShape3D_bxisd")
+target_position = Vector3(0, 0, 0)
+
+[node name="DropToGroundCast" type="ShapeCast3D" parent="." unique_id=693353599]
+enabled = false
+shape = SubResource("SphereShape3D_dmeo7")
+target_position = Vector3(0, -2.5, 0)
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=46029567]
+modulate = Color(1, 0.803922, 0.294118, 1)
+pixel_size = 0.02
+billboard = 1
+sprite_frames = SubResource("SpriteFrames_gscpw")
+frame_progress = 0.639718
+
+[node name="Decal" type="Decal" parent="." unique_id=889884376]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.35, 0)
+size = Vector3(0.5, 4, 0.5)
+texture_albedo = ExtResource("3_wgcfa")
+normal_fade = 0.5
+upper_fade = 1e-05
+distance_fade_enabled = true
+distance_fade_begin = 15.0
+distance_fade_length = 5.0
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
